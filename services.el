@@ -2,7 +2,7 @@
 ;; Copyright 2000-2017 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
-;; Version: 1.6
+;; Version: 1.7
 ;; Keywords: convenience, net, services
 ;; URL: https://github.com/davep/services.el
 ;; Package-Requires: ((cl-lib "0.5"))
