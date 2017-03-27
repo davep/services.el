@@ -17,7 +17,7 @@
 ;;
 ;; The latest services.el is always available from:
 ;;
-;;   <URL:http://www.davep.org/emacs/#services.el>
+;;   <URL:https://github.com/davep/services.el>
 
 ;;; BUGS:
 ;;
