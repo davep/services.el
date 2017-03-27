@@ -1,6 +1,11 @@
 ;;; services.el --- Services database access functions.
-;; Copyright 2000,2003,2004 by Dave Pearson <davep@davep.org>
-;; $Revision: 1.4 $
+;; Copyright 2000-2017 by Dave Pearson <davep@davep.org>
+
+;; Author: Dave Pearson <davep@davep.org>
+;; Version: 1.6
+;; Keywords: convenience, net, services
+;; URL: https://github.com/davep/services.el
+;; Package-Requires: ((cl-lib "0.5"))
 
 ;; services.el is free software distributed under the terms of the GNU
 ;; General Public Licence, version 2. For details see the file COPYING.
@@ -106,7 +111,7 @@ If FILE isn't supplied the value of `services-file' is used."
                                                   (service-aliases hit)))
                                (push service services)))
                         finally return (reverse services))))))))
-      
+
 (defun* services-find-by-name (name &optional (protocol "tcp") (services (services-read)))
   "Find the service whose name is NAME."
   (loop for service in services
