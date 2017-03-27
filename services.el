@@ -70,7 +70,7 @@
          (port (split-string (cadr words) "/")))
     (list
      (car words)
-     (string-to-int (car port))
+     (string-to-number (car port))
      (list (cadr port))
      (cl-loop for s in (cddr words)
               while (not (= (aref s 0) ?#))
@@ -138,7 +138,7 @@ If FILE isn't supplied the value of `services-file' is used."
                 (completing-read "Protocol: " '(("tcp") ("udp")) nil nil "tcp" nil)))
   (let* ((services (services-read))
          (service (or (when (string-match "^[0-9]+$" search)
-                        (services-find-by-port (string-to-int search) protocol services))
+                        (services-find-by-port (string-to-number search) protocol services))
                       (services-find-by-name search protocol services)
                       (services-find-by-name (downcase search) protocol services)
                       (services-find-by-name (upcase search) protocol services)
