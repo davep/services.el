@@ -125,7 +125,7 @@ If FILE isn't supplied the value of `services-file' is used."
 
 ;;;###autoload
 (defun services-lookup (search protocol)
-  "Find a service and display its details."
+  "Find a service given by SEARCH and PROTOCOL and display its details."
   (interactive (list
                 (completing-read "Service Search: "
                                  (or services-name-cache
@@ -175,4 +175,4 @@ If FILE isn't supplied the value of `services-file' is used."
 
 (provide 'services)
 
-;;; services.el ends here.
+;;; services.el ends here
