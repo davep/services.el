@@ -31,7 +31,7 @@
 ;; Things we need:
 
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 ;; Customisable variables.
 
@@ -72,11 +72,11 @@
      (car words)
      (string-to-int (car port))
      (list (cadr port))
-     (loop for s in (cddr words)
-           while (not (= (aref s 0) ?#))
-           collect s))))
+     (cl-loop for s in (cddr words)
+              while (not (= (aref s 0) ?#))
+              collect s))))
 
-(defun* services-read (&optional (file services-file))
+(cl-defun services-read (&optional (file services-file))
   "Read the services list from FILE.
 
 If FILE isn't supplied the value of `services-file' is used."
@@ -87,41 +87,41 @@ If FILE isn't supplied the value of `services-file' is used."
                 (insert-file-contents file)
                 (setf (point) (point-min))
                 (let ((services (list)))
-                  (loop for service in
-                        (loop until (eobp)
-                              do (setf (point) (line-beginning-position))
-                              unless (or (looking-at "^[ \t]*#") (looking-at "^[ \t]*$"))
-                              collect (services-line-to-list (buffer-substring (line-beginning-position) (line-end-position)))
-                              do (forward-line))
-                        do (let ((hit (assoc (service-name service) services)))
-                             (if (and hit (= (service-port hit) (service-port service)))
-                                 (setf (cdr hit) (list
-                                                  (service-port hit)
-                                                  (append (service-protocols hit) (service-protocols service))
-                                                  (service-aliases hit)))
-                               (push service services)))
-                        finally return (reverse services))))))))
+                  (cl-loop for service in
+                           (cl-loop until (eobp)
+                                    do (setf (point) (line-beginning-position))
+                                    unless (or (looking-at "^[ \t]*#") (looking-at "^[ \t]*$"))
+                                    collect (services-line-to-list (buffer-substring (line-beginning-position) (line-end-position)))
+                                    do (forward-line))
+                           do (let ((hit (assoc (service-name service) services)))
+                                (if (and hit (= (service-port hit) (service-port service)))
+                                    (setf (cdr hit) (list
+                                                     (service-port hit)
+                                                     (append (service-protocols hit) (service-protocols service))
+                                                     (service-aliases hit)))
+                                  (push service services)))
+                           finally return (reverse services))))))))
 
-(defun* services-find-by-name (name &optional (protocol "tcp") (services (services-read)))
+(cl-defun services-find-by-name (name &optional (protocol "tcp") (services (services-read)))
   "Find the service whose name is NAME."
-  (loop for service in services
-        when (and (string= (service-name service) name)
-                  (member protocol (service-protocols service)))
-        return service))
+  (cl-loop for service in services
+           when (and (string= (service-name service) name)
+                     (member protocol (service-protocols service)))
+           return service))
 
-(defun* services-find-by-port (port &optional (protocol "tcp") (services (services-read)))
+(cl-defun services-find-by-port (port &optional (protocol "tcp") (services (services-read)))
   "Find the service whose port is PORT."
-  (loop for service in services
-        when (and (= (service-port service) port)
-                  (member protocol (service-protocols service)))
-        return service))
+  (cl-loop for service in services
+           when (and (= (service-port service) port)
+                     (member protocol (service-protocols service)))
+           return service))
 
-(defun* services-find-by-alias (alias &optional (protocol "tcp") (services (services-read)))
+(cl-defun services-find-by-alias (alias &optional (protocol "tcp") (services (services-read)))
   "Find a the service whose with an alias of ALIAS."
-  (loop for service in services
-        when (and (member alias (service-aliases service))
-                  (member protocol (service-protocols service)))
-        return service))
+  (cl-loop for service in services
+           when (and (member alias (service-aliases service))
+                     (member protocol (service-protocols service)))
+           return service))
 
 ;;;###autoload
 (defun services-lookup (search protocol)
@@ -130,10 +130,10 @@ If FILE isn't supplied the value of `services-file' is used."
                 (completing-read "Service Search: "
                                  (or services-name-cache
                                      (setq services-name-cache
-                                           (loop for service in (services-read)
-                                                 collect (list (service-name service))
-                                                 append (loop for alias in (service-aliases service)
-                                                              collect (list alias)))))
+                                           (cl-loop for service in (services-read)
+                                                    collect (list (service-name service))
+                                                    append (cl-loop for alias in (service-aliases service)
+                                                                    collect (list alias)))))
                                  nil nil "" nil)
                 (completing-read "Protocol: " '(("tcp") ("udp")) nil nil "tcp" nil)))
   (let* ((services (services-read))
@@ -154,15 +154,15 @@ If FILE isn't supplied the value of `services-file' is used."
                    (if aliases
                        (format "Aliases: %s"
                                (with-output-to-string
-                                   (loop for alias in (service-aliases service)
-                                         do (princ alias) (princ " "))))
+                                   (cl-loop for alias in (service-aliases service)
+                                            do (princ alias) (princ " "))))
                      "")
                    (if protocols
                        (format "%sProtocols: %s"
                                (if aliases " " "")
                                (with-output-to-string
-                                   (loop for protocol in protocols
-                                         do (princ protocol) (princ " "))))
+                                   (cl-loop for protocol in protocols
+                                            do (princ protocol) (princ " "))))
                      "")))
       (error "No service matching \"%s\" using protocol %s" search protocol))))
 
