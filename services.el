@@ -26,16 +26,6 @@
 ;;   also wanted them to be totally independant of each other. Suggestions
 ;;   of how to sweetly remedy this situation are welcome.
 
-;;; INSTALLATION:
-;;
-;; o Drop services.el somwehere into your `load-path'. Try your site-lisp
-;;   directory for example (you might also want to byte-compile the file).
-;;
-;; o Add the following autoload statement to your ~/.emacs file:
-;;
-;;   (autoload 'services-lookup      "services" "Perform a service lookup" t)
-;;   (autoload 'services-clear-cache "services" "Clear the service cache"  t)
-
 ;;; Code:
 
 ;; Things we need:
